@@ -1,0 +1,58 @@
+@startuml classDiagram
+
+object CreateGroup{
+    state groupName: string
+    state formValidated: boolean
+}
+object AddMembers {
+    state members: string[]
+    state formValidated: boolean
+}
+
+
+
+object CenteredOverlay
+object CenteredOverlayForm{
+    props title: string
+    props inputType: string 
+    props handleFormSubmitted: funtion
+
+    state currentValue: string
+    
+}
+object ExpenseMain {
+    groupName: string
+    members: string[]
+
+    ' TODO state
+}
+object AddExpenseForm {
+    members: string[]
+    state player: string
+    state description : string
+    state amount: number
+    state paidAt: Date
+    state formValidated: boolean
+}
+object ExpenseSummery {
+    expenses : expense[]
+    members : string[]
+
+}
+object ExpenseList {
+    expenses: expense[]
+}
+
+CreateGroup *-- CenteredOverlayForm
+AddMembers *-- CenteredOverlayForm
+
+CenteredOverlayForm *-- CenteredOverlay
+
+ExpenseMain *-- AddExpenseForm
+ExpenseMain *-- ExpenseSummery
+ExpenseMain *-- ExpenseList
+
+ExpenseList *-- CenteredOverlay
+
+
+@enduml
