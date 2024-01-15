@@ -1,17 +1,33 @@
-import { Button, Container, Form, Row } from "react-bootstrap";
+import { Button, Container, Form, Row, InputGroup } from "react-bootstrap";
 import CenteredOverlayForm from "./CenteredOverlayForm";
 import { useRecoilState } from "recoil";
 import { GroupNameState } from "../states/GroupName";
+import { useState } from "react";
 
 export const CreateGroup = () => {
-  const [groupName, setGroupNmae] = useRecoilState(GroupNameState);
+  const [validated, setValidated] = useState(false);
+  const [validGroupName, setvalidGroupName] = useState(false);
+
+  const [groupName, setGroupName] = useRecoilState(GroupNameState);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    if (form.checkValidity()) {
+      setvalidGroupName(true);
+    } else {
+      event.stopPropagation();
+      setvalidGroupName(false);
+    }
+    setValidated(true);
+  };
 
   return (
     <div>
       <h1>Dutch Pay</h1>
 
       <Container>
-        <Form noValidate>
+        <Form noValidate validated={validated} onSubmit={handleSubmit}>
           <Row>
             <h2>먼저, 더치 페이 할 그룹의 이름을 정해볼까요?</h2>
           </Row>
@@ -21,8 +37,12 @@ export const CreateGroup = () => {
                 type="text"
                 required
                 placeholder="2022 제주도 여행"
+                onChange={(e) => {
+                  setGroupName(e.target.value);
+                }}
+                isValid={validated}
               />
-              <Form.Control.Feedback type="invalid">
+              <Form.Control.Feedback type="invalid" data-valid={validGroupName}>
                 그룹 이름을 입력해 주세요.
               </Form.Control.Feedback>
             </Form.Group>

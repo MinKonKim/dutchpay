@@ -1,9 +1,14 @@
 import userEvent from "@testing-library/user-event";
 import { CreateGroup } from "./CreateGroup";
 import { render, screen } from "@testing-library/react";
+import { RecoilRoot } from "recoil";
 
 const renderComponent = () => {
-  render(<CreateGroup />);
+  render(
+    <RecoilRoot>
+      <CreateGroup />
+    </RecoilRoot>
+  );
 
   const input = screen.getByPlaceholderText(`2022 제주도 여행`);
   const saveButton = screen.getByText(`저장`);
@@ -27,7 +32,7 @@ describe("그룹 생성 페이지", () => {
   test("그룹 이름을 입력하지 않고, 저장 버튼을 클릭시 에러메시지 노출", async () => {
     const { errorMessage, saveButton } = renderComponent();
     await userEvent.click(saveButton);
-    expect(errorMessage).not.toBeNull();
+    expect(errorMessage).toHaveAttribute("data-valid", "false");
   });
 
   test("그룹 이름을 입력 후 저장버튼 클릭시, 저장성공", async () => {

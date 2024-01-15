@@ -6,6 +6,7 @@ const config = {
     url: "https://jestjs.io/",
     userAgent: "Agent/007",
   },
+  setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
 };
 
 module.exports = config;
