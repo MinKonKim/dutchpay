@@ -35,6 +35,7 @@ export const AddExpenseMain = () => {
 
     return descValid && payerValid && amountValid;
   };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     if (checkFormValidity()) {
@@ -48,6 +49,10 @@ export const AddExpenseMain = () => {
       setExpense((expense) => [...expense, newExpense]);
     }
     setValidated(true);
+
+    setDesc("");
+    setAmount(0);
+    setPayer(null);
   };
 
   return (
@@ -147,7 +152,8 @@ const StyledTitle = styled.h3`
 `;
 
 const StyledWrapper = styled.div`
-  padding: 50px;
+  margin-top: 4rem;
+  padding: 48px;
   background-color: #683ba1;
   box-shadow: 3px 0px 4px rgba(0, 0, 0, 0.25);
   border-radius: 15px;
