@@ -1,6 +1,6 @@
 import { RecoilRoot } from "recoil";
 import { ExpenseMain } from "./ExpenseMain";
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { groupMemberState } from "../states/GroupMembers";
 const renderComponent = () => {
@@ -38,53 +38,93 @@ const renderComponent = () => {
 };
 
 describe("비용 정산 메인 페이지", () => {
-  test("비용 추가 컴포넌트 렌더링", () => {
-    const { dateInput, descInput, amountInput, payerInput, addButton } =
+  describe("비용 추가 컴포넌트", () => {
+    test("비용 추가 컴포넌트 렌더링", () => {
+      const { dateInput, descInput, amountInput, payerInput, addButton } =
+        renderComponent();
+      expect(dateInput).toBeInTheDocument();
+      expect(descInput).toBeInTheDocument();
+      expect(amountInput).toBeInTheDocument();
+      expect(payerInput).toBeInTheDocument();
+      expect(addButton).toBeInTheDocument();
+    });
+
+    test('비용 값을 입력하지 않고 "추가" 버튼 클릭시, 에러 메시지 노출한다.', async () => {
+      const {
+        addButton,
+        descErrorMessage,
+        payerErrorMessage,
+        amountErrorMessage,
+      } = renderComponent();
+
+      expect(addButton).toBeInTheDocument();
+      await userEvent.click(addButton);
+
+      expect(descErrorMessage).toHaveAttribute("data-valid", "false");
+
+      expect(payerErrorMessage).toHaveAttribute("data-valid", "false");
+
+      expect(amountErrorMessage).toHaveAttribute("data-valid", "false");
+    });
+
+    test('비용 추가에 필수적인 값들을 입력한 후 "추가" 버튼 클릭시, 저장에 성공', async () => {
+      const { descInput, amountInput, payerInput, addButton } =
+        renderComponent();
+
+      await userEvent.type(descInput, "장보기");
+      await userEvent.type(amountInput, "30000");
+      await userEvent.selectOptions(payerInput, "영수");
+      await userEvent.click(addButton);
+
+      const descErrorMessage = screen.queryByText(
+        "비용 내용을 입력해 주셔야 합니다."
+      );
+      expect(descErrorMessage).toHaveAttribute("data-valid", "true");
+
+      const payerErrorMessage =
+        screen.queryByText("결제자를 선택해 주셔야 합니다.");
+      expect(payerErrorMessage).toHaveAttribute("data-valid", "true");
+
+      const amountErrorMessage =
+        screen.queryByText("금액을 입력해 주셔야 합니다.");
+      expect(amountErrorMessage).toHaveAttribute("data-valid", "true");
+    });
+  });
+
+  describe("비용 리스트 컴포넌트", () => {
+    test("비용 리스트 컴포넌트가 랜더링 되는가?", () => {
       renderComponent();
-    expect(dateInput).toBeInTheDocument();
-    expect(descInput).toBeInTheDocument();
-    expect(amountInput).toBeInTheDocument();
-    expect(payerInput).toBeInTheDocument();
-    expect(addButton).toBeInTheDocument();
+      const expenseListComponent = screen.getByTestId("expenseList");
+      expect(expenseListComponent).toBeInTheDocument();
+    });
   });
 
-  test('비용 값을 입력하지 않고 "추가" 버튼 클릭시, 에러 메시지 노출한다.', async () => {
-    const {
-      addButton,
-      descErrorMessage,
-      payerErrorMessage,
-      amountErrorMessage,
-    } = renderComponent();
+  describe("새로운 비용이 입력 되었을 때, ", () => {
+    const addNewExpense = async () => {
+      const { dateInput, descInput, payerInput, amountInput, addButton } =
+        renderComponent();
 
-    expect(addButton).toBeInTheDocument();
-    await userEvent.click(addButton);
+      await userEvent.type(dateInput, "2024-01-17");
+      await userEvent.type(descInput, "장보기");
+      await userEvent.type(amountInput, "30000");
+      await userEvent.selectOptions(payerInput, "영수");
+      await userEvent.click(addButton);
+    };
+    test("날짜, 내용, 결제자, 금액 데이터가 정산 리스트에 추가 된다.", async () => {
+      await addNewExpense();
+      // 새로운 비용을 입력
+      const expenseListComponent = screen.getByTestId("expenseList");
+      const dateValue = within(expenseListComponent).getByText("2022-10-10");
+      expect(dateValue).toBeInTheDocument();
 
-    expect(descErrorMessage).toHaveAttribute("data-valid", "false");
+      const descValue = within(expenseListComponent).getByText("장보기");
+      expect(descValue).toBeInTheDocument();
 
-    expect(payerErrorMessage).toHaveAttribute("data-valid", "false");
+      const payerValue = within(expenseListComponent).getByText("영수");
+      expect(payerValue).toBeInTheDocument();
 
-    expect(amountErrorMessage).toHaveAttribute("data-valid", "false");
-  });
-
-  test('비용 추가에 필수적인 값들을 입력한 후 "추가" 버튼 클릭시, 저장에 성공', async () => {
-    const { descInput, amountInput, payerInput, addButton } = renderComponent();
-
-    await userEvent.type(descInput, "장보기");
-    await userEvent.type(amountInput, "30000");
-    await userEvent.selectOptions(payerInput, "영수");
-    await userEvent.click(addButton);
-
-    const descErrorMessage = screen.queryByText(
-      "비용 내용을 입력해 주셔야 합니다."
-    );
-    expect(descErrorMessage).toHaveAttribute("data-valid", "true");
-
-    const payerErrorMessage =
-      screen.queryByText("결제자를 선택해 주셔야 합니다.");
-    expect(payerErrorMessage).toHaveAttribute("data-valid", "true");
-
-    const amountErrorMessage =
-      screen.queryByText("금액을 입력해 주셔야 합니다.");
-    expect(amountErrorMessage).toHaveAttribute("data-valid", "true");
+      const amountValue = within(expenseListComponent).getByText("30000 원");
+      expect(amountValue).toBeInTheDocument();
+    });
   });
 });
