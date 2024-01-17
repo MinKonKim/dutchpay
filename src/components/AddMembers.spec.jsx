@@ -1,4 +1,4 @@
-import { render, screen } from "react-dom";
+import { render, screen } from "@testing-library/react";
 import { RecoilRoot } from "recoil";
 import { AddMembers } from "./AddMembers";
 import userEvent from "@testing-library/user-event";
