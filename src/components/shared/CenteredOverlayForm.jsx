@@ -1,6 +1,7 @@
 import { Button, Container, Form, Row } from "react-bootstrap";
 import styled from "styled-components";
 import { OverlayWrapper } from "./OverlayWrapper";
+import { ServiceLogo } from "./ServiceLogo";
 
 export const CenteredOverlayForm = ({
   title,
@@ -10,7 +11,7 @@ export const CenteredOverlayForm = ({
 }) => {
   return (
     <StyledCentralizedContainer>
-      <StyledH1>Dutch Pay</StyledH1>
+      <ServiceLogo />
       <OverlayWrapper>
         <Container>
           <Form noValidate validated={validated} onSubmit={handleSubmit}>
@@ -31,15 +32,6 @@ export const CenteredOverlayForm = ({
     </StyledCentralizedContainer>
   );
 };
-
-const StyledH1 = styled.h1`
-  font-family: "Roboto", sans-serif;
-  font-weight: 200;
-  font-size: 2.5em;
-  margin-bottom: 0.25rem;
-  letter-spacing: 10px;
-  color: #6610f2;
-`;
 
 const StyledCentralizedContainer = styled(Container)`
   width: 50vw;

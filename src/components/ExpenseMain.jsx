@@ -4,6 +4,8 @@ import { ExpenseTable } from "./ExpenseTable";
 import { styled } from "styled-components";
 import { useRecoilValue } from "recoil";
 import { GroupNameState } from "./../states/GroupName";
+import { SettlementResult } from "./SettlementResult";
+import { ServiceLogo } from "./shared/ServiceLogo";
 
 export const ExpenseMain = () => {
   return (
@@ -22,7 +24,15 @@ export const ExpenseMain = () => {
 
 const LeftPane = () => (
   <Container>
-    <AddExpenseMain />
+    <Row>
+      <ServiceLogo />
+    </Row>
+    <Row>
+      <AddExpenseMain />
+    </Row>
+    <Row>
+      <SettlementResult />
+    </Row>
   </Container>
 );
 
