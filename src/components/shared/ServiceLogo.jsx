@@ -10,4 +10,5 @@ const StyledLogo = styled.h1`
   letter-spacing: 3px;
   color: #6610f2;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.25);
+  text-align: center;
 `;

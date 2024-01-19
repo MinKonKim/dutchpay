@@ -52,7 +52,7 @@ export const AddExpenseMain = () => {
 
     setDesc("");
     setAmount(0);
-    setPayer(null);
+    // setPayer(null);
   };
 
   return (
@@ -142,7 +142,7 @@ export const AddExpenseMain = () => {
   );
 };
 
-const StyledTitle = styled.h3`
+export const StyledTitle = styled.h3`
   color: #fffbfb;
   text-align: center;
   font-weight: 700;
@@ -152,7 +152,7 @@ const StyledTitle = styled.h3`
 `;
 
 const StyledWrapper = styled.div`
-  margin-top: 4rem;
+  margin-top: 1rem;
   padding: 48px;
   background-color: #683ba1;
   box-shadow: 3px 0px 4px rgba(0, 0, 0, 0.25);

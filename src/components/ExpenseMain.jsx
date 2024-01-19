@@ -24,33 +24,41 @@ export const ExpenseMain = () => {
 
 const LeftPane = () => (
   <Container>
-    <Row>
-      <ServiceLogo />
-    </Row>
-    <Row>
-      <AddExpenseMain />
-    </Row>
-    <Row>
-      <SettlementResult />
-    </Row>
+    <StyledGapRow>
+      <Row>
+        <ServiceLogo />
+      </Row>
+      <Row>
+        <AddExpenseMain />
+      </Row>
+      <Row>
+        <SettlementResult />
+      </Row>
+    </StyledGapRow>
   </Container>
 );
 
 const RightPane = () => {
   const groupName = useRecoilValue(GroupNameState);
   return (
-    <StyledContainer>
+    <StyledRightPaneWrapper>
       <Row>
         <StyledGroupName>{groupName || "그룹 이름"}</StyledGroupName>
       </Row>
       <Row>
         <ExpenseTable />
       </Row>
-    </StyledContainer>
+    </StyledRightPaneWrapper>
   );
 };
 
-const StyledContainer = styled(Container)`
+const StyledGapRow = styled(Row)`
+  gap: 5vh;
+  padding-top: 100px;
+  justify-content: center;
+`;
+
+const StyledRightPaneWrapper = styled(Container)`
   padding: 100px 31px 100px 31px;
 `;
 

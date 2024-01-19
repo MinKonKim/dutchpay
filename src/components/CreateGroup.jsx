@@ -1,4 +1,5 @@
 import { Form } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { GroupNameState } from "../states/GroupName";
 import { useState } from "react";
@@ -9,12 +10,14 @@ export const CreateGroup = () => {
   const [validGroupName, setvalidGroupName] = useState(false);
 
   const setGroupName = useSetRecoilState(GroupNameState);
+  const navigate = useNavigate();
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const form = event.currentTarget;
     if (form.checkValidity()) {
       setvalidGroupName(true);
+      navigate("/members");
     } else {
       event.stopPropagation();
       setvalidGroupName(false);

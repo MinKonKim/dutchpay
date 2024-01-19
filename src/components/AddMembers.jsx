@@ -5,14 +5,21 @@ import { groupMemberState } from "../states/GroupMembers";
 import { useState } from "react";
 import { GroupNameState } from "../states/GroupName";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../routes";
 
 export const AddMembers = () => {
   const [groupMembers, setGroupMembers] = useRecoilState(groupMemberState);
   const groupName = useRecoilValue(GroupNameState) || undefined;
   const [validated, setValidated] = useState(false);
+  const navigate = useNavigate();
 
-  const handleSubmit = () => {
+  const handleSubmit = (event) => {
+    event.preventDefault();
     setValidated(true);
+    if (groupMembers.length > 0) {
+      navigate(ROUTES.EXPENSES_MAIN);
+    }
   };
 
   const header = `${groupName} 에 속한 사람들의 이름을 모두 적어주세요.`;
